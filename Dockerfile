@@ -1,6 +1,13 @@
-FROM php:7.2-zts-alpine
+FROM composer
 
-WORKDIR /usr/src/app/
+WORKDIR /usr/src/composer/
+
+COPY composer.json ./
+COPY composer.lock ./
+
+RUN composer install --ignore-platform-reqs
+
+FROM php:7.2-zts-alpine
 
 RUN set -x \
     && apk add --no-cache bash git openssh autoconf gcc libc-dev make \
@@ -12,12 +19,10 @@ RUN git clone https://github.com/krakjoe/pthreads.git -b master /tmp/pthreads \
     && docker-php-ext-install /tmp/pthreads \
     && rm -r /tmp/pthreads
 
-# composer
-RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');" \
-    && chmod +x composer.phar \
-    && /usr/src/app/composer.phar install
+WORKDIR /usr/src/app/
 
-# Add global composer bin dir to PATH
+COPY ./ /usr/src/app/
+COPY --from=0 /usr/src/composer/ .
+COPY --from=0 /usr/bin/composer /usr/bin/composer
+
 ENV PATH /root/.composer/vendor/bin:$PATH

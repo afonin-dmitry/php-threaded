@@ -4,11 +4,11 @@ services:
     container_name: php-zts
     build: .
     volumes:
-      - ./:/usr/src/app/
+      - vendor:/usr/src/app/vendor/
+      - .:/usr/src/app/
     networks:
       - network
     entrypoint: /usr/src/app/start.sh
-
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -18,6 +18,9 @@ services:
       - 15672:15672
     networks:
       - network
+
+volumes:
+  vendor:
 
 networks:
   network: {}
