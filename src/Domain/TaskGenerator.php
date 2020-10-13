@@ -31,10 +31,11 @@ class TaskGenerator
         $batch = [];
 
         while (
-            $user_id++ <= $this->users_count
+            $user_id <= $this->users_count
             && $sequence = $this->createSequence($user_id)
         ) {
             $batch = array_merge($batch, $sequence);
+            $user_id++;
         }
 
         return $batch;
