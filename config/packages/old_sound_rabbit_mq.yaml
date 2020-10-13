@@ -1,0 +1,25 @@
+old_sound_rabbit_mq:
+    connections:
+        default:
+            #url: '%env(RABBITMQ_URL)%'
+            host: 'rabbitmq'
+            port: 5672
+            user: 'guest'
+            password: 'guest'
+            vhost: '/'
+            lazy: false
+            connection_timeout: 3
+            read_write_timeout: 3
+            keepalive: false
+            heartbeat: 0
+            use_socket: true
+    producers:
+        task:
+            connection:       default
+            exchange_options: { name: 'tasks', type: direct }
+    consumers:
+        task:
+            connection: default
+            exchange_options: { name: 'tasks', type: direct }
+            queue_options: { name: 'tasks' }
+            callback: App\Consumer\Consumer

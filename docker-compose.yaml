@@ -1,0 +1,23 @@
+version: '3'
+services:
+  php-zts:
+    container_name: php-zts
+    build: .
+    volumes:
+      - ./:/usr/src/app/
+    networks:
+      - network
+    entrypoint: /usr/src/app/start.sh
+
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15671:15671
+      - 15672:15672
+    networks:
+      - network
+
+networks:
+  network: {}
