@@ -12,7 +12,6 @@ class TaskGeneratorTest extends TestCase
 {
     public function testTasksTotalCount(): void
     {
-        /** @var Task[] $tasks */
         $tasks = [];
         $generator = new TaskGenerator(10, 1000, 10);
 
